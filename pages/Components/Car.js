@@ -28,8 +28,7 @@ import { Bloom, ChromaticAberration, EffectComposer, DepthOfField } from '@react
 import { BlendFunction } from "postprocessing"
 import { useControls } from 'leva';
 
-
-
+import { Canvas } from '@react-three/fiber';
 
 const Rings = () => {
 
@@ -164,7 +163,7 @@ const Cube = () => {
             },
         },
         "Odd Cubes": {
-            value:  "#3e658c",
+            value: "#3e658c",
             onChange: (v) => {
                 for (let i = 0; i < boxRef.current.length; i++) {
                     let mesh = boxRef.current[i];
@@ -271,36 +270,36 @@ const FloatingGrid = () => {
     )
 }
 
-
 const CarScene = () => {
 
     const color = useControls({
         Bakground: '#000000',
     })
 
-
     return (
         <React.Fragment>
-            <Stats />
-            <ambientLight intensity={1} />
-            <OrbitControls />
-            <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} />
+            <Canvas shadows camera={{ position: [0, 10, 5] }}>
 
-            <color args={[color.Bakground]} attach="background" />
+                <Stats />
+                <ambientLight intensity={1} />
+                <OrbitControls />
+                <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} />
 
-            <CubeCamera resolution={125} frames={Infinity}>
-                {(texture) => (
-                    <React.Fragment>
-                        <Environment map={texture} />
-                        {/* Elements here wont reflect on car */}
-                        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-                        <Ghost />
-                    </React.Fragment>
-                )}
-            </CubeCamera>
-            <Rings />
-            <Cube />
-            {/* {[
+                <color args={[color.Bakground]} attach="background" />
+
+                <CubeCamera resolution={125} frames={Infinity}>
+                    {(texture) => (
+                        <React.Fragment>
+                            <Environment map={texture} />
+                            {/* Elements here wont reflect on car */}
+                            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+                            <Ghost />
+                        </React.Fragment>
+                    )}
+                </CubeCamera>
+                <Rings />
+                <Cube />
+                {/* {[
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((obj, i) => {
@@ -308,42 +307,43 @@ const CarScene = () => {
                         <Cube key={i} Color={i % 2 == 0 ? [0.4, 0.1, 0.1] : [0.05, 0.15, 0.4]} />
                     )
                 })} */}
-            <FloatingGrid />
-            <spotLight
-                color={[1, 0.25, 0.7]}
-                intensity={1.5}
-                angle={0.6}
-                penumbra={0.5}
-                position={[5, 5, 0]}
-                castShadow
-                shadow-bias={-0.0001}
-            />
-            <spotLight
-                color={[0.14, 0.5, 1]}
-                intensity={2}
-                angle={0.6}
-                penumbra={0.5}
-                position={[-5, 5, 0]}
-                castShadow
-                shadow-bias={-0.0001}
-            />
-            <Ground />
-
-            <EffectComposer>
-                <DepthOfField focusDistance={0.0036} focalLength={0.01} bokehScale={6} height={480} />
-                <Bloom
-                    blendFunction={BlendFunction.ADD}
-                    intensity={1.3}
-                    width={300}
-                    height={300}
-                    kernelSize={5}
-                    luminanceThreshold={0.65}
-                    luminanceSmoothing={0.25}
+                <FloatingGrid />
+                <spotLight
+                    color={[1, 0.25, 0.7]}
+                    intensity={1.5}
+                    angle={0.6}
+                    penumbra={0.5}
+                    position={[5, 5, 0]}
+                    castShadow
+                    shadow-bias={-0.0001}
                 />
-                <ChromaticAberration
-                    blendFunction={BlendFunction.NORMAL}
-                    offset={[0.0005, 0.0012]} />
-            </EffectComposer>
+                <spotLight
+                    color={[0.14, 0.5, 1]}
+                    intensity={2}
+                    angle={0.6}
+                    penumbra={0.5}
+                    position={[-5, 5, 0]}
+                    castShadow
+                    shadow-bias={-0.0001}
+                />
+                <Ground />
+
+                <EffectComposer>
+                    <DepthOfField focusDistance={0.0036} focalLength={0.01} bokehScale={6} height={480} />
+                    <Bloom
+                        blendFunction={BlendFunction.ADD}
+                        intensity={1.3}
+                        width={300}
+                        height={300}
+                        kernelSize={5}
+                        luminanceThreshold={0.65}
+                        luminanceSmoothing={0.25}
+                    />
+                    <ChromaticAberration
+                        blendFunction={BlendFunction.NORMAL}
+                        offset={[0.0005, 0.0012]} />
+                </EffectComposer>
+            </Canvas>
 
         </React.Fragment>
     )

@@ -2,11 +2,7 @@ import { PerspectiveCamera, Stats } from '@react-three/drei'
 import Head from 'next/head'
 import React, { useRef, useState } from 'react'
 // Components
-import CubeScene from "./Components/Cube"
 import CarScene from './Components/Car'
-import TextureScene from './Components/Texture'
-import WaterScene from './Components/Water'
-import BackgroundScene from './Components/Background'
 
 // @react-three/fiber
 import { Canvas } from '@react-three/fiber'
@@ -26,9 +22,7 @@ const Home = () => {
       </div>
 
       <div className={`col-start-1 col-end-8`}>
-        <Canvas shadows camera={{position:[0,10,5]}}>
           <CarScene />
-        </Canvas>
       </div>
 
     </div>
