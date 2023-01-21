@@ -2,7 +2,7 @@ import React, { Suspense, useEffect, useRef, useState } from 'react';
 // @react-three/fiber
 import { useFrame, useLoader } from '@react-three/fiber';
 // react-three/drei
-import { Bounds, Cloud, Float, Lightformer, Loader, MeshReflectorMaterial, Sky, Stars } from "@react-three/drei";
+import { Bounds, Cloud, Detailed, Float, Lightformer, Loader, MeshReflectorMaterial, PerformanceMonitor, Sky, Stars } from "@react-three/drei";
 import { CubeCamera, Environment, PerspectiveCamera, Stats, useTexture } from '@react-three/drei'
 import { OrbitControls } from '@react-three/drei';
 // three
@@ -10,20 +10,20 @@ import { Color, RepeatWrapping, TextureLoader, Vector3 } from 'three';
 import { CorvetteBlue } from '../../CorvetteBlue';
 import { Porche } from '../../Porche';
 import { Benz } from '../../Benz';
+import { BenzJSX } from '../../CClass';
 import { BMW } from '../../BMW';
 import { Tesla } from '../../Tesla';
 import { Urus } from '../../Urus';
 import { AstonMartin } from '../../AstonMartin';
-import { Batmobil } from '../../Batmobil';
 import { CyberPunk } from '../../CyberPunk';
 import { Ferari } from '../../Ferari';
 import { Formula1 } from '../../Formula1';
 import { Ghost } from '../../Ghost';
 import { Maserati } from '../../Maserati';
-import { Mclaren } from '../../Mclaren';
+import { MclarenJSX } from '../../MclarenJSX';
+
 import { SCIFI } from '../../SCIFI';
 import { Shelby } from '../../Shelby';
-import { GWagon6x6 } from '../../GWagon6x6';
 import { Bloom, ChromaticAberration, EffectComposer, DepthOfField } from '@react-three/postprocessing';
 import { BlendFunction } from "postprocessing"
 import { useControls } from 'leva';
@@ -271,20 +271,105 @@ const FloatingGrid = () => {
 }
 
 const CarScene = () => {
+    const [activeModel, setActiveModel] = useState("Ghost");
+    const [dpr, setDpr] = useState(1.5)
 
     const color = useControls({
         Bakground: '#000000',
-    })
+    });
+
+    const CarOptions = {
+        Ghost: "Ghost",
+        Corvette: "Corvette",
+        Benz: "Benz",
+        BMW: "BMW",
+        Tesla: "Tesla",
+        Shelby: "Shelby",
+        Maserati: "Maserati",
+        AstonMartin: "AstonMartin",
+        SCIFI: "SCIFI",
+        Mclaren: "Mclaren",
+        Ferari: "Ferari",
+        CyberPunk: "CyberPunk",
+        Urus: "Urus",
+        Porche: "Porche",
+        F1: "F1"
+    }
+
+    const Car = useControls({
+        "Model": {
+            value: "Ghost",
+            options: CarOptions,
+            onChange: (v) => {
+                setActiveModel(v)
+            },
+        },
+    });
+
+    const displayModel = () => {
+        switch (activeModel) {
+            case "Ghost":
+                return <Ghost />
+                break;
+            case "Corvette":
+                return <CorvetteBlue />
+                break;
+            case "Benz":
+                return <BenzJSX />
+                break;
+            case "BMW":
+                return <BMW />
+                break;
+            case "Tesla":
+                return <Tesla />
+                break;
+            case "Shelby":
+                return <Shelby />
+                break;
+            case "Maserati":
+                return <Maserati />
+                break;
+            case "SCIFI":
+                return <SCIFI />
+                break;
+            case "Mclaren":
+                return <MclarenJSX />
+                break;
+            case "Ferari":
+                return <Ferari />
+                break;
+            case "CyberPunk":
+                return <CyberPunk />
+                break;
+            case "Urus":
+                return <Urus />
+                break;
+            case "Porche":
+                return <Porche />
+                break;
+            case "F1":
+                return <Formula1 />
+                break;
+            case "AstonMartin":
+                return <AstonMartin />
+                break;
+                AstonMartin
+            default:
+            // NOTHING
+        }
+    }
 
     return (
-            <Canvas shadows camera={{ position: [0, 10, 5] }}>
-                    <Stats />
-                    <ambientLight intensity={1} />
-                    <OrbitControls />
-                    <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} />
+        <Canvas dpr={dpr} frameloop="demand" shadows camera={{ position: [0, 10, 5] }}>
+            <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} >
 
-                    <color args={[color.Bakground]} attach="background" />
-                    <Suspense fallback={null}>
+                <Stats />
+                <ambientLight intensity={1} />
+                <OrbitControls />
+                <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} />
+
+                <color args={[color.Bakground]} attach="background" />
+                <Suspense fallback={null}>
 
                     <CubeCamera resolution={125} frames={Infinity}>
                         {(texture) => (
@@ -292,18 +377,19 @@ const CarScene = () => {
                                 <Environment map={texture} />
                                 {/* Elements here wont reflect on car */}
                                 <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+                                <Detailed distances={[0, 10, 20]}>
+                                    {displayModel()}
 
-                                <Ghost />
-
+                                </Detailed>
                             </React.Fragment>
                         )}
                     </CubeCamera>
-                    </Suspense>
 
                     <Rings />
-                    <Cube />
+                    {/* <Cube /> */}
+                </Suspense>
 
-                    {/* {[
+                {/* {[
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((obj, i) => {
@@ -311,43 +397,45 @@ const CarScene = () => {
                         <Cube key={i} Color={i % 2 == 0 ? [0.4, 0.1, 0.1] : [0.05, 0.15, 0.4]} />
                     )
                 })} */}
-                    <FloatingGrid />
-                    <spotLight
-                        color={[1, 0.25, 0.7]}
-                        intensity={1.5}
-                        angle={0.6}
-                        penumbra={0.5}
-                        position={[5, 5, 0]}
-                        castShadow
-                        shadow-bias={-0.0001}
-                    />
-                    <spotLight
-                        color={[0.14, 0.5, 1]}
-                        intensity={2}
-                        angle={0.6}
-                        penumbra={0.5}
-                        position={[-5, 5, 0]}
-                        castShadow
-                        shadow-bias={-0.0001}
-                    />
-                    <Ground />
+                <FloatingGrid />
+                <spotLight
+                    color={[1, 0.25, 0.7]}
+                    intensity={1.5}
+                    angle={0.6}
+                    penumbra={0.5}
+                    position={[5, 5, 0]}
+                    castShadow
+                    shadow-bias={-0.0001}
+                />
+                <spotLight
+                    color={[0.14, 0.5, 1]}
+                    intensity={2}
+                    angle={0.6}
+                    penumbra={0.5}
+                    position={[-5, 5, 0]}
+                    castShadow
+                    shadow-bias={-0.0001}
+                />
+                <Ground />
 
-                    <EffectComposer>
-                        <DepthOfField focusDistance={0.0036} focalLength={0.01} bokehScale={6} height={480} />
-                        <Bloom
-                            blendFunction={BlendFunction.ADD}
-                            intensity={1.3}
-                            width={300}
-                            height={300}
-                            kernelSize={5}
-                            luminanceThreshold={0.65}
-                            luminanceSmoothing={0.25}
-                        />
-                        <ChromaticAberration
-                            blendFunction={BlendFunction.NORMAL}
-                            offset={[0.0005, 0.0012]} />
-                    </EffectComposer>
-            </Canvas>
+                <EffectComposer>
+                    <DepthOfField focusDistance={0.0036} focalLength={0.01} bokehScale={6} height={480} />
+                    <Bloom
+                        blendFunction={BlendFunction.ADD}
+                        intensity={1.3}
+                        width={300}
+                        height={300}
+                        kernelSize={5}
+                        luminanceThreshold={0.65}
+                        luminanceSmoothing={0.25}
+                    />
+                    <ChromaticAberration
+                        blendFunction={BlendFunction.NORMAL}
+                        offset={[0.0005, 0.0012]} />
+                </EffectComposer>
+            </PerformanceMonitor>
+
+        </Canvas>
     )
 }
 export default CarScene;

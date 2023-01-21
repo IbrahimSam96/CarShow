@@ -9,7 +9,7 @@ export const Maserati = () => {
     const gltf = useLoader(GLTFLoader, "Models/Maserati/Maserati.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(0.75, 0.75, 0.75);
+        gltf.scene.scale.set(0.7, 0.7, 0.7);
         gltf.scene.position.set(0, 0.01, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

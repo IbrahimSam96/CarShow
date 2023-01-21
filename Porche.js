@@ -9,8 +9,8 @@ export const Porche = () => {
     const gltf = useLoader(GLTFLoader, "Models/Porche/Porche.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(1, 1, 1);
-        gltf.scene.position.set(0, 0.7, 0);
+        gltf.scene.scale.set(0.75, 0.75, 0.75);
+        gltf.scene.position.set(0, 0.44, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {
                 object.castShadow = true;

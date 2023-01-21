@@ -9,7 +9,7 @@ export const BMW = () => {
     const gltf = useLoader(GLTFLoader, "Models/BMW/BMW.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(1, 1, 1);
+        gltf.scene.scale.set(0.8, 0.8, 0.8);
         gltf.scene.position.set(0, 0.01, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

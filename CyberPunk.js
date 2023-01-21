@@ -9,7 +9,7 @@ export const CyberPunk = () => {
     const gltf = useLoader(GLTFLoader, "Models/CyberPunk/CyberPunk.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(1, 1, 1);
+        gltf.scene.scale.set(0.7, 0.7, 0.7);
         gltf.scene.position.set(0, 0.5, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

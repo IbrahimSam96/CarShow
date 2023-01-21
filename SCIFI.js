@@ -9,7 +9,7 @@ export const SCIFI = () => {
     const gltf = useLoader(GLTFLoader, "Models/SCIFI/SCIFI.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(0.65, 0.65, 0.65);
+        gltf.scene.scale.set(0.6, 0.6, 0.6);
         gltf.scene.position.set(0, 0.01, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

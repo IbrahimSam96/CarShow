@@ -9,7 +9,7 @@ export const CorvetteBlue = () => {
     const gltf = useLoader(GLTFLoader, "Models/Corvette/Corvette.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(0.005, 0.005, 0.005);
+        gltf.scene.scale.set(0.004, 0.004, 0.004);
         gltf.scene.position.set(0, -0.035, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

@@ -9,7 +9,7 @@ export const Formula1 = () => {
     const gltf = useLoader(GLTFLoader, "Models/Formula1/Formula1.gltf")
 
     useEffect(() => {
-        gltf.scene.scale.set(1, 1, 1);
+        gltf.scene.scale.set(0.8, 0.8, 0.8);
         gltf.scene.position.set(0, 0.01, 0);
         gltf.scene.traverse((object) => {
             if (object instanceof Mesh) {

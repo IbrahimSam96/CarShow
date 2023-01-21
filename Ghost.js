@@ -19,7 +19,6 @@ export const Ghost = () => {
             }
         })
     }, [gltf])
-    
 
     return <primitive object={gltf.scene} />;
 
