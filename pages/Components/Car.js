@@ -108,44 +108,38 @@ const Rings = () => {
     )
 }
 
-const Cube = () => {
+const Cube = ({ color, Index }) => {
 
-    const boxRef = useRef([]);
+    const boxRef = useRef();
     // Math.random returns 0-1 Math.pow(X,Y) 0-1^2 
     const [scale] = useState(() => Math.pow(Math.random(), 2) * 0.5 + 0.05);
     const [xRotSpeed] = useState(() => Math.random());
     const [yRotSpeed] = useState(() => Math.random());
 
     useFrame((state, delta) => {
-        for (let i = 0; i < boxRef.current.length; i++) {
 
-            boxRef.current[i].rotation.x += delta * xRotSpeed
-            boxRef.current[i].rotation.y += delta * yRotSpeed
-        }
+        boxRef.current.rotation.x += delta * xRotSpeed
+        boxRef.current.rotation.y += delta * yRotSpeed
 
     }, [xRotSpeed, yRotSpeed]);
 
     useEffect(() => {
-
-        for (let i = 0; i < boxRef.current.length; i++) {
-
-            const resetPosition = () => {
-                // X returns number between -3 to +3; Y returns numbers 0.1 to 2.6; Z returns numbers 15 to -15
-                let v = new Vector3((Math.random() * 2 - 1) * 3, Math.random() * 2.5 + 0.1, (Math.random() * 2 - 1) * 15);
-                // if v.x position is less than 0 (meaning in the center of screen blocking car add 1.75 to disperce it) 
-                if (v.x < 0) {
-                    v.x -= 1.75
-                }
-                if (v.x > 0) {
-                    v.x += 1.75
-                }
-                return v
+        const resetPosition = () => {
+            // X returns number between -3 to +3; Y returns numbers 0.1 to 2.6; Z returns numbers 15 to -15
+            let v = new Vector3((Math.random() * 2 - 1) * 3, Math.random() * 2.5 + 0.1, (Math.random() * 2 - 1) * 15);
+            // if v.x position is less than 0 (meaning in the center of screen blocking car add 1.75 to disperce it) 
+            if (v.x < 0) {
+                v.x -= 1.75
             }
-            const position = resetPosition()
-
-            // delta means how long since last frame was rendered
-            boxRef.current[i].position.set(position.x, position.y, position.z);
+            if (v.x > 0) {
+                v.x += 1.75
+            }
+            return v
         }
+        const position = resetPosition()
+
+        // delta means how long since last frame was rendered
+        boxRef.current.position.set(position.x, position.y, position.z);
 
     }, [])
 
@@ -153,26 +147,20 @@ const Cube = () => {
         "Even Cubes": {
             value: "#865151",
             onChange: (v) => {
-                for (let i = 0; i < boxRef.current.length; i++) {
-                    let mesh = boxRef.current[i];
-
-                    if (i % 2 == 1) {
-                        mesh.material.color = new Color(v)
-                    }
+                let mesh = boxRef.current;
+                if (Index % 2 == 1) {
+                    mesh.material.color = new Color(v)
                 }
             },
         },
         "Odd Cubes": {
             value: "#3e658c",
             onChange: (v) => {
-                for (let i = 0; i < boxRef.current.length; i++) {
-                    let mesh = boxRef.current[i];
-
-                    if (i % 2 == 1) {
-                    }
-                    else {
-                        mesh.material.color = new Color(v)
-                    }
+                let mesh = boxRef.current;
+                if (Index % 2 == 1) {
+                }
+                else {
+                    mesh.material.color = new Color(v)
                 }
             },
         },
@@ -180,19 +168,13 @@ const Cube = () => {
 
     return (
         <React.Fragment>
-            {[
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((obj, i) => {
-                    return (
-                        <mesh key={i} ref={(el) => (boxRef.current[i] = el)} scale={scale} castShadow  >
-                            <boxGeometry args={[1, 1, 1]} />
-                            <meshStandardMaterial color={i % 2 == 0 ? [0.4, 0.1, 0.1] : [0.05, 0.15, 0.4]} envMapIntensity={0.15} />
-                        </mesh>
-                    )
-                })}
+            return (
+            <mesh ref={boxRef} scale={scale} castShadow  >
+                <boxGeometry args={[1, 1, 1]} />
+                <meshStandardMaterial color={color} envMapIntensity={0.15} />
+            </mesh>
+            )
         </React.Fragment>
-
     )
 }
 
@@ -359,6 +341,7 @@ const CarScene = () => {
         }
     }
 
+
     return (
         <Canvas dpr={dpr} frameloop="demand" shadows camera={{ position: [0, 10, 5] }}>
             <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} >
@@ -384,19 +367,21 @@ const CarScene = () => {
                             </React.Fragment>
                         )}
                     </CubeCamera>
-
                     <Rings />
-                    {/* <Cube /> */}
+                    {[
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((obj, i) => {
+                            return (
+                                <Cube
+                                    key={i}
+                                    Index={i}
+                                    color={i % 2 == 0 ? [0.4, 0.1, 0.1] : [0.05, 0.15, 0.4]}
+                                />
+                            )
+                        })}
                 </Suspense>
 
-                {/* {[
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((obj, i) => {
-                    return (
-                        <Cube key={i} Color={i % 2 == 0 ? [0.4, 0.1, 0.1] : [0.05, 0.15, 0.4]} />
-                    )
-                })} */}
                 <FloatingGrid />
                 <spotLight
                     color={[1, 0.25, 0.7]}
