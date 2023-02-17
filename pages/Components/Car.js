@@ -336,12 +336,12 @@ const CarScene = () => {
 
     return (
         <Canvas shadows camera={{ position: [0, 10, 5] }}>
-            <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} >
+            {/* <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} > */}
 
                 <Stats />
                 <ambientLight intensity={1} />
                 <OrbitControls />
-                {/* <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} /> */}
+                <PerspectiveCamera makeDefault fov={50} position={[0, 2, 8]} />
 
                 <color args={[0, 0, 0]} attach="background" />
                 <Suspense fallback={null}>
@@ -409,7 +409,7 @@ const CarScene = () => {
                         blendFunction={BlendFunction.NORMAL}
                         offset={[0.0005, 0.0012]} />
                 </EffectComposer>
-            </PerformanceMonitor>
+            {/* </PerformanceMonitor> */}
 
         </Canvas>
     )
