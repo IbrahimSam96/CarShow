@@ -8,8 +8,8 @@ const BackgroundScene = () => {
 
     useEffect(() => {
         setBgColor("hotpink")
-    })
-    
+    }, [])
+
     return (
         <React.Fragment>
             <Stats />

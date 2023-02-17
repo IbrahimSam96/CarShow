@@ -34,48 +34,35 @@ const Rings = () => {
 
     const ringsRef = useRef([]);
 
-    const data = useControls({
-        "Even Rings": {
-            value: "#ad7373",
-            onChange: (v) => {
-                for (let i = 0; i < ringsRef.current.length; i++) {
-                    let mesh = ringsRef.current[i];
+    // const data = useControls({
+    //     "Even Rings": {
+    //         value: "#ad7373",
+    //         onChange: (v) => {
+    //             for (let i = 0; i < ringsRef.current.length; i++) {
+    //                 let mesh = ringsRef.current[i];
 
-                    if (i % 2 == 1) {
-                        mesh.material.emissive = new Color(v)
-                    }
-                }
-            },
-        },
-        "Odd Rings": {
-            value: "#72adad",
-            onChange: (v) => {
-                for (let i = 0; i < ringsRef.current.length; i++) {
-                    let mesh = ringsRef.current[i];
+    //                 if (i % 2 == 1) {
+    //                     mesh.material.emissive = new Color(v)
+    //                 }
+    //             }
+    //         },
+    //     },
+    //     "Odd Rings": {
+    //         value: "#72adad",
+    //         onChange: (v) => {
+    //             for (let i = 0; i < ringsRef.current.length; i++) {
+    //                 let mesh = ringsRef.current[i];
 
-                    if (i % 2 == 1) {
-                    }
-                    else {
-                        mesh.material.emissive = new Color(v)
-                    }
-                }
-            },
-        },
-    })
+    //                 if (i % 2 == 1) {
+    //                 }
+    //                 else {
+    //                     mesh.material.emissive = new Color(v)
+    //                 }
+    //             }
+    //         },
+    //     },
+    // })
 
-
-    useEffect(() => {
-        for (let i = 0; i < ringsRef.current.length; i++) {
-            let mesh = ringsRef.current[i];
-
-            if (i % 2 == 1) {
-                mesh.material.emissive = new Color(6, 0.15, 0.7)
-            }
-            else {
-                mesh.material.emissive = new Color(0.1, 0.7, 3)
-            }
-        }
-    }, [])
 
     useFrame((state) => {
         for (let i = 0; i < ringsRef.current.length; i++) {
@@ -86,12 +73,17 @@ const Rings = () => {
 
             mesh.scale.set(1 - dist * 0.04, 1 - dist * 0.04, 1 - dist * 0.04)
 
-            // if (i % 2 == 1) {
-            //     mesh.material.emissive = new Color(6, 0.15, 0.7)
+            let colorScale = 1;
+            // if (dist > 2) {
+            //   colorScale = 1 - (Math.min(dist, 12) - 2) / 6;
             // }
-            // else {
-            //     mesh.material.emissive = new Color(0.1, 0.7, 3)
-            // }
+            colorScale *= 0.5;
+
+            if (i % 2 == 1) {
+                mesh.material.emissive = new Color(6, 0.15, 0.7).multiplyScalar(colorScale);
+            } else {
+                mesh.material.emissive = new Color(0.1, 0.7, 3).multiplyScalar(colorScale);
+            }
         }
     })
 
@@ -143,33 +135,37 @@ const Cube = ({ color, Index }) => {
 
     }, [])
 
-    const data = useControls({
-        "Even Cubes": {
-            value: "#865151",
-            onChange: (v) => {
-                let mesh = boxRef.current;
-                if (Index % 2 == 1) {
-                    mesh.material.color = new Color(v)
-                }
-            },
-        },
-        "Odd Cubes": {
-            value: "#3e658c",
-            onChange: (v) => {
-                let mesh = boxRef.current;
-                if (Index % 2 == 1) {
-                }
-                else {
-                    mesh.material.color = new Color(v)
-                }
-            },
-        },
-    })
+    // const data = useControls({
+    //     "Even Cubes": {
+    //         value: "#865151",
+    //         onChange: (v) => {
+    //             let mesh = boxRef.current;
+    //             if (Index % 2 == 1) {
+    //                 mesh.material.color = new Color(v)
+    //             }
+    //         },
+    //     },
+    //     "Odd Cubes": {
+    //         value: "#3e658c",
+    //         onChange: (v) => {
+    //             let mesh = boxRef.current;
+    //             if (Index % 2 == 1) {
+    //             }
+    //             else {
+    //                 mesh.material.color = new Color(v)
+    //             }
+    //         },
+    //     },
+    // })
 
     return (
         <React.Fragment>
             return (
-            <mesh ref={boxRef} scale={scale} castShadow  >
+            <mesh
+                 ref={boxRef} 
+                 scale={scale} 
+                 castShadow  
+                 >
                 <boxGeometry args={[1, 1, 1]} />
                 <meshStandardMaterial color={color} envMapIntensity={0.15} />
             </mesh>
@@ -256,10 +252,6 @@ const CarScene = () => {
     const [activeModel, setActiveModel] = useState("Ghost");
     const [dpr, setDpr] = useState(1.5)
 
-    const color = useControls({
-        Bakground: '#000000',
-    });
-
     const CarOptions = {
         Ghost: "Ghost",
         Corvette: "Corvette",
@@ -337,21 +329,21 @@ const CarScene = () => {
                 break;
                 AstonMartin
             default:
-            // NOTHING
+                return <Car.value />
         }
     }
 
 
     return (
-        <Canvas dpr={dpr} frameloop="demand" shadows camera={{ position: [0, 10, 5] }}>
+        <Canvas shadows camera={{ position: [0, 10, 5] }}>
             <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} >
 
                 <Stats />
                 <ambientLight intensity={1} />
                 <OrbitControls />
-                <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} />
+                {/* <PerspectiveCamera makeDefault fov={50} position={[1, 1.05, 4]} /> */}
 
-                <color args={[color.Bakground]} attach="background" />
+                <color args={[0, 0, 0]} attach="background" />
                 <Suspense fallback={null}>
 
                     <CubeCamera resolution={125} frames={Infinity}>
